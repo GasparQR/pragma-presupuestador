@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 import { Quote } from '@/lib/db'
 
 const styles = StyleSheet.create({
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   thDesc: { flex: 3, fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#6b6a65', textTransform: 'uppercase', letterSpacing: 0.6 },
   thType: { flex: 1, fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#6b6a65', textTransform: 'uppercase', letterSpacing: 0.6 },
   thNum: { width: 50, textAlign: 'right', fontSize: 8, fontFamily: 'Helvetica-Bold', color: '#6b6a65', textTransform: 'uppercase', letterSpacing: 0.6 },
-  itemRow: { flexDirection: 'row', paddingVertical: 7, borderBottomWidth: 1, borderBottomColor: '#e5e4e0' },
+  itemRow: { flexDirection: 'row', paddingVertical: 7, borderBottomWidth: 1, borderBottomColor: '#e5e4e0', flexWrap: 'nowrap' },
   tdDesc: { flex: 3, fontSize: 10 },
   tdType: { flex: 1, fontSize: 10, color: '#6b6a65' },
   tdNum: { width: 50, textAlign: 'right', fontSize: 10 },
@@ -42,16 +42,10 @@ const styles = StyleSheet.create({
 })
 
 const statusColor: Record<string, string> = {
-  draft: '#f1efea',
-  sent: '#e8f1fb',
-  approved: '#eaf3de',
-  rejected: '#fcebeb',
+  draft: '#f1efea', sent: '#e8f1fb', approved: '#eaf3de', rejected: '#fcebeb',
 }
 const statusTextColor: Record<string, string> = {
-  draft: '#6b6a65',
-  sent: '#185fa5',
-  approved: '#3b6d11',
-  rejected: '#a32d2d',
+  draft: '#6b6a65', sent: '#185fa5', approved: '#3b6d11', rejected: '#a32d2d',
 }
 const statusLabel: Record<string, string> = {
   draft: 'Borrador', sent: 'Enviado', approved: 'Aprobado', rejected: 'Rechazado',
@@ -66,11 +60,10 @@ export default function QuotePDF({ quote }: { quote: Quote }) {
     <Document title={`Presupuesto ${quote.number} — Pragma Studio`} author="Pragma Studio">
       <Page size="A4" style={styles.page}>
 
-        {/* Header */}
         <View style={styles.header}>
           <View>
             <Text style={styles.brandName}>Pragma Studio</Text>
-            <Text style={styles.brandSub}>Web Development &amp; SaaS Solutions</Text>
+            <Text style={styles.brandSub}>Web Development & SaaS Solutions</Text>
           </View>
           <View style={styles.metaRight}>
             <Text style={styles.quoteNum}>Presupuesto #{quote.number}</Text>
@@ -82,7 +75,6 @@ export default function QuotePDF({ quote }: { quote: Quote }) {
           </View>
         </View>
 
-        {/* Client + Details */}
         <View style={styles.section2}>
           <View style={styles.clientBox}>
             <Text style={styles.sectionLabel}>Cliente</Text>
@@ -109,26 +101,26 @@ export default function QuotePDF({ quote }: { quote: Quote }) {
           </View>
         </View>
 
-        {/* Items table */}
-        <View style={styles.tableHeader}>
+        <View wrap={false} style={styles.tableHeader}>
           <Text style={styles.thDesc}>Descripción</Text>
           <Text style={styles.thType}>Tipo</Text>
-          <Text style={[styles.thNum]}>Cant.</Text>
+          <Text style={styles.thNum}>Cant.</Text>
           <Text style={styles.thNum}>Precio</Text>
           <Text style={styles.thNum}>Total</Text>
         </View>
-        {quote.items.map(item => (
-          <View key={item.id} style={styles.itemRow}>
-            <Text style={styles.tdDesc}>{item.description}</Text>
-            <Text style={styles.tdType}>{item.type}</Text>
-            <Text style={styles.tdNum}>{item.qty}</Text>
-            <Text style={styles.tdNum}>{fmt(item.price)}</Text>
-            <Text style={styles.tdNum}>{fmt(item.qty * item.price)}</Text>
-          </View>
-        ))}
+        <View>
+          {quote.items.map(item => (
+            <View key={item.id} style={styles.itemRow} wrap={false}>
+              <Text style={styles.tdDesc}>{item.description}</Text>
+              <Text style={styles.tdType}>{item.type}</Text>
+              <Text style={styles.tdNum}>{item.qty}</Text>
+              <Text style={styles.tdNum}>{fmt(item.price)}</Text>
+              <Text style={styles.tdNum}>{fmt(item.qty * item.price)}</Text>
+            </View>
+          ))}
+        </View>
 
-        {/* Totals */}
-        <View style={styles.totalsArea}>
+        <View wrap={false} style={styles.totalsArea}>
           <View style={styles.totalsBox}>
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>Subtotal</Text>
@@ -147,15 +139,13 @@ export default function QuotePDF({ quote }: { quote: Quote }) {
           </View>
         </View>
 
-        {/* Notes */}
         {quote.notes && (
-          <View style={styles.notes}>
-            <Text style={styles.sectionLabel}>Notas &amp; Condiciones</Text>
+          <View wrap={false} style={styles.notes}>
+            <Text style={styles.sectionLabel}>Notas & Condiciones</Text>
             <Text style={styles.notesText}>{quote.notes}</Text>
           </View>
         )}
 
-        {/* Footer */}
         <View style={styles.footer} fixed>
           <Text style={styles.footerText}>Pragma Studio — pragma.studio</Text>
           <Text style={styles.footerText}>Este presupuesto es válido por 30 días desde su emisión.</Text>
