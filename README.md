@@ -5,10 +5,17 @@ App web para gestión de presupuestos. Stack: **Next.js 14 + @react-pdf/renderer
 ## Instalación local
 
 ```bash
+
 npm install
 npm run dev
 ```
+Abrí [http://localhost:3000](http://localhost:3000).
 
+## Iniciar local
+```
+cd ~/Downloads/pragma-quotes
+npm run dev
+```
 Abrí [http://localhost:3000](http://localhost:3000).
 
 ## Deploy en Vercel
